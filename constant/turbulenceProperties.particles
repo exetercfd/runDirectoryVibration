@@ -1,0 +1,66 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5                                     |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      turbulenceProperties.particles;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+simulationType  RAS;
+
+RAS
+{
+    RASModel kineticTheory;                 // APR changed from phasePressure to kineticTheory
+
+    turbulence      on;
+    printCoeffs     on;
+
+    kineticTheoryCoeffs
+    {
+        equilibrium             off;        // APR changed from on to off
+
+        e                       0.91;       // APR changed from 0.8 to 0.91
+        alphaMax                0.65;
+        alphaMinFriction        0.65;        // APR changed from 0.5 to 0.6
+        residualAlpha           1e-4;       // APR added
+        
+        amplitude               1.25e-3;
+        frequency               20.1;       // 20.1, 26.1, 32.1, 37.1
+        flowDensity             1.0e-10;
+        
+        
+        viscosityModel          Gidaspow;
+        conductivityModel       Gidaspow;
+        granularPressureModel   Lun;
+        frictionalStressModel   JohnsonJacksonSchaeffer;    // APR changed from JohnsonJackson to JohnsonJacksonSchaeffer
+        radialModel             SinclairJackson;
+
+        JohnsonJacksonSchaefferCoeffs                       // APR changed from JohnsonJackson to JohnsonJacksonSchaeffer
+        {
+            Fr                      0.05;
+            eta                     2;
+            p                       5;
+            phi                     28.5;
+            alphaDeltaMin           0.05;
+            wallPhi                 28.5;
+            viscosityFactor         1.0;
+        }
+        
+        particleParticleGranularDissipation Lun; 
+        fluidParticleGranularDissipation Louge;
+        debuggingKineticTheory on;
+	wallFriction Coulomb;
+    }
+}
+
+
+// ************************************************************************* //
